@@ -7,4 +7,3 @@ df = read_excel('ClasseurBaseTicketsSAE.xlsx')
 
 Code_Rayon = df['Code_Rayon'].values
 print(shape(Code_Rayon))
-print("fvds")

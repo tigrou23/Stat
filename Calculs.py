@@ -46,14 +46,13 @@ Z = []
 for i in distanceVille:
     Z.append(i)
 plt.hist(Z, bins=[0, 10, 20, 30, 40, 50, 60, 70], edgecolor='red')
-title("Répartition de la distance en km des clients")
+title("Répartition de la distance en km des villes par rapport au magasin")
 plt.show()
 
 nbPerFoyer = carteFidelite.NbPerFoyer.values
 nbEnfant = carteFidelite.NbEnfant.values
 cov = mean(nbPerFoyer*nbEnfant)-mean(nbPerFoyer)*mean(nbEnfant)
 print("La covariance entre la variable du nombre de personnes par foyer et celle du nombre d'enfants par foyer est de", round(cov, 2))
-
 nbPerFoyer = carteFidelite.NbPerFoyer.values
 nbEnfant = carteFidelite.NbEnfant.values
 params = linregress(nbPerFoyer, nbEnfant)
@@ -64,7 +63,7 @@ coefCor = params[2]
 y_mod = []
 for i in range(N):
     y_mod.append(a * nbPerFoyer[i] + b)
-print("Le coefficient de corrélation entre le nombre d'enfants par rapport au nombre de personnes par foyer est de", coefCor)
+print("Le coefficient de corrélation entre le nombre d'enfants par rapport au nombre de personnes par foyer est de", round(coefCor), 2)
 print("L'équation de la droite de régression est de : y =", round(a, 2),"x +", round(b, 2))
 plot(nbPerFoyer, nbEnfant, "bo", label = "Point qui constitue le nuage de points")
 plot(nbPerFoyer, y_mod, "r-", label = "Droite de régression")

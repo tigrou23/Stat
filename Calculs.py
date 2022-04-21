@@ -72,3 +72,9 @@ ylabel("Nombre d'enfants dans le foyer")
 plot(mean(nbPerFoyer),mean(nbEnfant), marker="o", color="red", label = "Centre de gravité")
 legend()
 show()
+
+prenom = carteFidelite.Prenom.values
+print("Le prénom le plus représenté dans la liste des clients fidèles (mode) est", statistics.mode(prenom))
+
+
+

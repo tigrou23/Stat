@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SAé - statistiques descriptives</title>
+<link rel="icon" type="image/ico" sizes="16x16" href="./assets/logo.ico">
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="sa%C3%A9-s204---exploitation-statistique-dune-base-de-donn%C3%A9es">Saé S2.04 - Exploitation statistique d'une base de données</h1>
+<p><em>Yoann Hoertner (102) &amp; Hugo Pereira (102)</em></p>
+<h3 id="approche-math%C3%A9matiques-statistiques">Approche mathématiques statistiques</h3>
+<ul>
+<li><a href="#chapter1">Les notions</a></li>
+<li><a href="#chapter2">Partie python</a>
+<ul>
+<li><a href="#section2_1">La moyenne</a></li>
+<li><a href="#section2_2">La variance</a></li>
+<li><a href="#section2_3">L'écart type</a></li>
+<li><a href="#section2_4">La médiane</a></li>
+<li><a href="#section2_5">Les quartiles</a></li>
+<li><a href="#section2_6">Les percentiles</a></li>
+<li><a href="#section2_7">Tri à plat</a></li>
+<li><a href="#section2_8">Boîte à moustache</a></li>
+<li><a href="#section2_9">Histogramme</a></li>
+<li><a href="#section2_10">La covariance</a></li>
+<li><a href="#section2_11">Le coefficient de corrélation, l'équation et la droite de régression</a></li>
+<li><a href="#section2_12">Le mode</a></li>
+<li><a href="#section2_13">Boîte à moustache sur population stratifiée</a></li>
+</ul>
+</li>
+<li><a href="#chapter3">Partie Excel</a>
+<ul>
+<li><a href="#section3_1">La moyenne</a></li>
+<li><a href="#section3_2">La variance</a></li>
+<li><a href="#section3_3">L'écart type</a></li>
+<li><a href="#section3_4">La médiane</a></li>
+<li><a href="#section3_5">Les quartiles</a></li>
+<li><a href="#section3_6">Les percentiles</a></li>
+<li><a href="#section3_7">Tri à plat</a></li>
+<li><a href="#section3_8">La covariance</a></li>
+<li><a href="#section3_9">Le coefficient de corrélation</a></li>
+<li><a href="#section3_10">L'équation et la droite de régression</a></li>
+<li><a href="#section3_11">Le camembert</a></li>
+<li><a href="#section3_12">Histogramme</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="les-notions-a-class%22anchor%22-id%22chapter1%22a">Les notions <a class="anchor" id="chapter1"></a></h2>
+<p><img src="./assets/TODO.png" alt=""></p>
+<p>Liste des notions traitées ou non traitée (<a href="./assets/TODO.pdf">lien du PDF</a>)</p>
+<h2 id="partie-python-a-class%22anchor%22-id%22chapter2%22a">Partie python <a class="anchor" id="chapter2"></a></h2>
+<p>Voici la liste des bibliothèques que nous utilisons lors de nos requêtes :</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> statistics <span class="hljs-comment"># pour récupérer des fonctions de statistique</span>
+<span class="hljs-keyword">from</span> pandas <span class="hljs-keyword">import</span> *  <span class="hljs-comment"># pour lire, importer et manipuler des données sous forme tableur</span>
+<span class="hljs-keyword">from</span> numpy <span class="hljs-keyword">import</span> *  <span class="hljs-comment"># pour faire des calculs</span>
+<span class="hljs-keyword">from</span> matplotlib.pylab <span class="hljs-keyword">import</span> *  <span class="hljs-comment"># pour faire des graphiques</span>
+<span class="hljs-keyword">from</span> scipy.stats <span class="hljs-keyword">import</span> linregress <span class="hljs-comment"># pour calculer ce qui est en rapport avec la droite de régression</span>
+</div></code></pre>
+<p>Nous rajoutons l'importation des feuilles du fichier excel que nous utiliserons :</p>
+<pre class="hljs"><code><div>produit = read_excel(<span class="hljs-string">'ClasseurBaseTicketsSAE.xlsx'</span>, <span class="hljs-string">'Produit'</span>)
+carteFidelite = read_excel(<span class="hljs-string">'ClasseurBaseTicketsSAE.xlsx'</span>, <span class="hljs-string">'CarteFidelite'</span>)
+ville = read_excel(<span class="hljs-string">'ClasseurBaseTicketsSAE.xlsx'</span>, <span class="hljs-string">'Ville'</span>)
+detailTicket = read_excel(<span class="hljs-string">'ClasseurBaseTicketsSAE.xlsx'</span>, <span class="hljs-string">'DetailTicket'</span>)
+</div></code></pre>
+<h2 id="la-moyenne-a-class%22anchor%22-id%22section21%22a">La moyenne <a class="anchor" id="section2_1"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>PrixUnit = produit.Prix_Unit.values
+print(<span class="hljs-string">"En moyenne, un produit coûte"</span>, round(mean(PrixUnit), <span class="hljs-number">2</span>), <span class="hljs-string">"€"</span>)
+</div></code></pre>
+<p><em>Résultat et interprétation :</em></p>
+<pre class="hljs"><code><div>En moyenne, un produit coûte 8.43 €
+</div></code></pre>
+<h2 id="la-variance-a-class%22anchor%22-id%22section22%22a">La variance <a class="anchor" id="section2_2"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>PrixUnit = produit.Prix_Unit.values
+print(<span class="hljs-string">"La variance des prix unitaires des produits est de"</span>, round(var(PrixUnit), <span class="hljs-number">2</span>))
+</div></code></pre>
+<p><em>Résultat :</em></p>
+<pre class="hljs"><code><div>La variance des prix unitaires des produits est de 25.82
+</div></code></pre>
+<p><em>Interprétation :</em></p>
+<p>La variance ne nous permet pas d'analyser car elle n'a pas d'unité. On sait que plus elle est grandre plus les écarts entre les prix et la moyenne sont élevés mais nous attendrons d'avoir l'écart type pour récupérer l'unité.</p>
+<h2 id="l%C3%A9cart-type-a-class%22anchor%22-id%22section23%22a">L'écart type <a class="anchor" id="section2_3"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>Unites_Stock = produit.Unites_Stock.values
+print(<span class="hljs-string">"L'écart type des prix unitaires des produits est de"</span>, round(std(PrixUnit), <span class="hljs-number">2</span>), <span class="hljs-string">"€"</span>)
+</div></code></pre>
+<p><em>Résultat</em> :</p>
+<pre class="hljs"><code><div>L'écart type des prix unitaires des produits est de 5.08 €
+</div></code></pre>
+<p><em>Interprétation</em> :</p>
+<p>L'écart type nous permet de mesurer (à l'instar de la variance) la dispersion des valeurs autour de la moyenne. D'après le résultat, on en conclut que la population est homogène car 5 €uros n'est pas un coût très élevé.</p>
+<h2 id="la-m%C3%A9diane-a-class%22anchor%22-id%22section24%22a">La médiane <a class="anchor" id="section2_4"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>NbPerFoyer = carteFidelite.NbPerFoyer.values
+print(<span class="hljs-string">"La médiane du nombre de personnes par foyer est de :"</span>, np.percentile(NbPerFoyer, <span class="hljs-number">50</span>), <span class="hljs-string">"personne(s)."</span>)
+</div></code></pre>
+<p><em>Résultat</em> :</p>
+<pre class="hljs"><code><div>La médiane du nombre de personnes par foyer est de : 3.0 personne(s).
+</div></code></pre>
+<p><em>Interprétation</em> :</p>
+<p>Cela veut dire qu'il y a autant de foyer qui se trouvent en dessous de 3 personnes que de familles qui se trouvent au dessus.</p>
+<h2 id="les-quartiles-a-class%22anchor%22-id%22section25%22a">Les quartiles <a class="anchor" id="section2_5"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>NbPerFoyer = carteFidelite.NbPerFoyer.values
+print(<span class="hljs-string">"Le premier quartile du nombre de personnes par foyer est de :"</span>, np.percentile(NbPerFoyer, <span class="hljs-number">25</span>), <span class="hljs-string">"personne(s)."</span>)
+</div></code></pre>
+<p><em>Résultat</em> :</p>
+<pre class="hljs"><code><div>Le premier quartile du nombre de personnes par foyer est de : 2.0 personne(s).
+</div></code></pre>
+<p><em>Interprétation</em> :</p>
+<p>25% des foyers sont composés d'un maximum de 2 personnes.</p>
+<h2 id="les-percentiles-a-class%22anchor%22-id%22section26%22a">Les percentiles <a class="anchor" id="section2_6"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>NbPerFoyer = carteFidelite.NbPerFoyer.values
+print(<span class="hljs-string">"Le 10ème percentile du nombre de personnes par foyer est de :"</span>, np.percentile(NbPerFoyer, <span class="hljs-number">10</span>), <span class="hljs-string">"personne(s)."</span>)
+</div></code></pre>
+<p><em>Résultat</em> :</p>
+<pre class="hljs"><code><div>Le 10ème percentile du nombre de personnes par foyer est de : 1.0 personne(s).
+</div></code></pre>
+<p><em>Interprétation</em> :</p>
+<p>10% des foyers sont composés de 1 personnes ou moins.</p>
+<h2 id="tri-%C3%A0-plat-a-class%22anchor%22-id%22section27%22a">Tri à plat <a class="anchor" id="section2_7"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>PrixUnit = produit.Prix_Unit.values
+Z = []
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> PrixUnit:
+    Z.append(round(i, <span class="hljs-number">0</span>))
+plt.hist(Z, bins=[<span class="hljs-number">0</span>, <span class="hljs-number">5</span>, <span class="hljs-number">10</span>, <span class="hljs-number">15</span>, <span class="hljs-number">20</span>, <span class="hljs-number">60</span>, <span class="hljs-number">70</span>], edgecolor=<span class="hljs-string">'red'</span>)
+title(<span class="hljs-string">"Répartition des prix unitaires"</span>)
+plt.show()
+</div></code></pre>
+<p><em>Résultat</em> :</p>
+<p><img src="./assets/triAPlat.png" alt=""></p>
+<p><em>Interprétation</em> :</p>
+<p>On remarque grâce à notre tri à plat qu'une grande partie des prix des produits se trouve entre 5 et 10 €uros. On remarque également que l'entreprise ne vend que très peu de produit cher. En effet, les produits se trouvent majoritairement entre 5 et 15 €uros.</p>
+<h2 id="bo%C3%AEte-%C3%A0-moustache-a-class%22anchor%22-id%22section28%22a">Boîte à moustache <a class="anchor" id="section2_8"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>distanceVille = ville.DistanceKM.values
+boxplot(distanceVille)
+gca().xaxis.set_ticklabels([<span class="hljs-string">'Toutes les distances'</span>])
+title(<span class="hljs-string">"Variable DistanceKM"</span>)
+show()
+</div></code></pre>
+<p><em>Résultat</em> :</p>
+<p><img src="./assets/boiteAMoustache2.png" alt=""></p>
+<p><em>Interprétation</em> :</p>
+<p>Grâce à cette boîte à moustache, on peut dire que la ville la plus loin du magasin se trouve à plus de 50 km. De plus, 75 % des villes se situent à moins de 30 km du magasin. De plus, 25 % des villes se situent à moins de 25 km. Enfin, la médiane est située aux alentours de 25 km. C'est-à-dire qu'il y a autant de villes à plus de 25 km que de villes à moins de 25 km.</p>
+<h2 id="histogramme-a-class%22anchor%22-id%22section29%22a">Histogramme <a class="anchor" id="section2_9"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>distanceVille = ville.DistanceKM.values
+Z = []
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> distanceVille:
+    Z.append(i)
+plt.hist(Z, edgecolor=<span class="hljs-string">'red'</span>)
+title(<span class="hljs-string">"Répartition de la distance en km des villes par rapport au magasin"</span>)
+plt.show()
+</div></code></pre>
+<p><em>Résultat</em> :</p>
+<p><img src="./assets/histogramme.png" alt=""></p>
+<p><em>Interprétation</em> :</p>
+<p>L'histogramme nous montre graphiquement que une grande partie des villes se trouve à une trenteine de km du magasin. Les deux villes les plus éloignées se trouvent entre 45 et 55km. Enfin, il existe 3 villes qui se trouvent à moins de 5km.</p>
+<h2 id="la-covariance-a-class%22anchor%22-id%22section210%22a">La covariance <a class="anchor" id="section2_10"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>nbPerFoyer = carteFidelite.NbPerFoyer.values
+nbEnfant = carteFidelite.NbEnfant.values
+cov = mean(nbPerFoyer*nbEnfant)-mean(nbPerFoyer)*mean(nbEnfant)
+print(<span class="hljs-string">"La covariance entre la variable du nombre de personnes par foyer et celle du nombre d'enfants par foyer est de"</span>, round(cov, <span class="hljs-number">2</span>))
+</div></code></pre>
+<p><em>Résultat</em> :</p>
+<pre class="hljs"><code><div>La covariance entre la variable du nombre de personnes par foyer et celle du nombre d'enfants par foyer est de 0.62
+</div></code></pre>
+<p><em>Interprétation</em> :</p>
+<p>//à écrire</p>
+<h2 id="le-coefficient-de-corr%C3%A9lation-l%C3%A9quation-et-la-droite-de-r%C3%A9gression-a-class%22anchor%22-id%22section211%22a">Le coefficient de corrélation, l'équation et la droite de régression <a class="anchor" id="section2_11"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>nbPerFoyer = carteFidelite.NbPerFoyer.values
+nbEnfant = carteFidelite.NbEnfant.values
+params = linregress(nbPerFoyer, nbEnfant)
+N = len(nbEnfant)
+a = params[<span class="hljs-number">0</span>]
+b = params[<span class="hljs-number">1</span>]
+coefCor = params[<span class="hljs-number">2</span>]
+y_mod = []
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(N):
+    y_mod.append(a * nbPerFoyer[i] + b)
+print(<span class="hljs-string">"Le coefficient de corrélation entre le nombre d'enfants par rapport au nombre de personnes par foyer est de"</span>, round(coefCor,<span class="hljs-number">2</span>))
+print(<span class="hljs-string">"L'équation de la droite de régression est de : y ="</span>, round(a, <span class="hljs-number">2</span>),<span class="hljs-string">"x +"</span>, round(b, <span class="hljs-number">2</span>))
+plot(nbPerFoyer, nbEnfant, <span class="hljs-string">"bo"</span>, label = <span class="hljs-string">"Point qui constitue le nuage de points"</span>)
+plot(nbPerFoyer, y_mod, <span class="hljs-string">"r-"</span>, label = <span class="hljs-string">"Droite de régression"</span>)
+xlabel(<span class="hljs-string">"Nombre de personnes dans le foyer"</span>)
+ylabel(<span class="hljs-string">"Nombre d'enfants dans le foyer"</span>)
+plot(mean(nbPerFoyer),mean(nbEnfant), marker=<span class="hljs-string">"o"</span>, color=<span class="hljs-string">"red"</span>, label = <span class="hljs-string">"Centre de gravité"</span>)
+legend()
+show()
+</div></code></pre>
+<p><em>Résultat</em> :</p>
+<pre class="hljs"><code><div>Le coefficient de corrélation entre le nombre d'enfants par rapport au nombre de personnes par foyer est de 0.47
+L'équation de la droite de régression est de : y = 0.33 x + -0.38
+
+![](./assets/regression.png)
+
+</div></code></pre>
+<p><em>Interprétation</em> :</p>
+<p>Le coefficient de corrélation est supérieur à 0. Cela signifie que lorsque le nombre de personnes dans le foyer augmente, le nombre d'enfants dans ce même foyer à tendance à augmenter. Notre coefficient n'est pas proche de 0 donc les variations de ces deux variables ne sont pas indépendantes.</p>
+<h2 id="le-mode-a-class%22anchor%22-id%22section212%22a">Le mode <a class="anchor" id="section2_12"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>prenom = carteFidelite.Prenom.values
+print(<span class="hljs-string">"Le prénom le plus représenté dans la liste des clients fidèles (mode) est"</span>, statistics.mode(prenom))
+</div></code></pre>
+<p><em>Résultat</em> :</p>
+<pre class="hljs"><code><div>Le prénom le plus représenté dans la liste des clients fidèles (mode) est Chloé
+</div></code></pre>
+<p><em>Interprétation</em> :</p>
+<p>Le mode vise à trouver l'élément qui est le plus présent dans la variable. Il peut être utilisé avec des variables qualitatives. De ce fait nous avons déterminé que le nom le plus présent dans la variable Prenom est celui de Chloé.</p>
+<h2 id="bo%C3%AEte-%C3%A0-moustache-sur-population-stratifi%C3%A9e-a-class%22anchor%22-id%22section213%22a">Boîte à moustache sur population stratifiée <a class="anchor" id="section2_13"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>PrixUnit = produit.Prix_Unit.values	
+CodeRayon = produit.Code_rayon.values
+boxplot([PrixUnit[CodeRayon == <span class="hljs-number">32</span>], PrixUnit[CodeRayon == <span class="hljs-number">37</span>], PrixUnit[CodeRayon == <span class="hljs-number">54</span>]])
+gca().xaxis.set_ticklabels([<span class="hljs-string">'Légumes'</span>, <span class="hljs-string">'Oeufs'</span>, <span class="hljs-string">'Viandes'</span>])
+title(<span class="hljs-string">"Variable Prix_Unit suivant le nom des rayons"</span>)
+show()
+</div></code></pre>
+<p><em>Résultat</em> :</p>
+<p><img src="./assets/boiteAMoustache3.png" alt=""></p>
+<p><em>Interprétation</em> :</p>
+<p>Le fait de disposer ces trois boîtes à moustache nous permet de comparer les prix des trois rayons. On d'office que les produits au rayon des viandes sont plus chers que les légumes et que les oeufs.</p>
+<p>On remarque aussi qu'il existe une viande particulièrement chère à plus de 30 €.</p>
+<h2 id="partie-excel-a-class%22anchor%22-id%22chapter3%22a">Partie Excel <a class="anchor" id="chapter3"></a></h2>
+<h2 id="la-moyenne-a-class%22anchor%22-id%22section31%22a">La moyenne <a class="anchor" id="section3_1"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>=<span class="hljs-built_in">AVERAGE</span>(Produit!<span class="hljs-symbol">H2</span>:<span class="hljs-symbol">H3116</span>)
+</div></code></pre>
+<p><em>Résultat et interprétation :</em></p>
+<p><img src="./assets/moyenneE.png" alt=""></p>
+<h2 id="la-variance-a-class%22anchor%22-id%22section32%22a">La variance <a class="anchor" id="section3_2"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>=<span class="hljs-built_in">VAR.P</span>(Produit!<span class="hljs-symbol">G:G</span>)
+</div></code></pre>
+<p><em>Résultat et interprétation :</em></p>
+<p><img src="./assets/varE.png" alt=""></p>
+<p>L'interprétation est la même que pour python (cf. <a href="#section2_2">La variance</a>)</p>
+<h2 id="l%C3%A9cart-type-a-class%22anchor%22-id%22section33%22a">L'écart type <a class="anchor" id="section3_3"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>=<span class="hljs-built_in">SQRT</span>(<span class="hljs-built_in">VAR.P</span>(Produit!<span class="hljs-symbol">G:G</span>))
+</div></code></pre>
+<p><em>Résultat et interprétation :</em></p>
+<p><img src="./assets/ecarttypeE.png" alt=""></p>
+<p>L'interprétation est la même que pour python (cf. <a href="#section2_3">L'écart type</a>)</p>
+<h2 id="la-m%C3%A9diane-a-class%22anchor%22-id%22section34%22a">La médiane <a class="anchor" id="section3_4"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>=<span class="hljs-built_in">MEDIAN</span>(CarteFidelite!<span class="hljs-symbol">H:H</span>)
+</div></code></pre>
+<p><em>Résultat et interprétation :</em></p>
+<p><img src="./assets/medianeE.png" alt=""></p>
+<p>L'interprétation est la même que pour python (cf. <a href="#section2_4">La médiane</a>)</p>
+<h2 id="les-quartiles-a-class%22anchor%22-id%22section35%22a">Les quartiles <a class="anchor" id="section3_5"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>=<span class="hljs-built_in">QUARTILE</span>(CarteFidelite!<span class="hljs-symbol">H:H</span>;<span class="hljs-number">1</span>)
+</div></code></pre>
+<p><em>Résultat et interprétation :</em></p>
+<p><img src="./assets/quartileE.png" alt=""></p>
+<p>L'interprétation est la même que pour python (cf. <a href="#section2_5">Les quartiles</a>)</p>
+<h2 id="les-percentiles-a-class%22anchor%22-id%22section36%22a">Les percentiles <a class="anchor" id="section3_6"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>=<span class="hljs-built_in">PERCENTILE</span>(CarteFidelite!<span class="hljs-symbol">H:H</span>;<span class="hljs-number">0</span>,<span class="hljs-number">1</span>)
+</div></code></pre>
+<p><em>Résultat et interprétation :</em></p>
+<p><img src="./assets/percentileE.png" alt=""></p>
+<p>L'interprétation est la même que pour python (cf. <a href="#section2_6">Les percentiles</a>)</p>
+<h2 id="le-tri-%C3%A0-plat-a-class%22anchor%22-id%22section37%22a">Le tri à plat <a class="anchor" id="section3_7"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>=<span class="hljs-built_in">FREQUENCY</span>(Ville!<span class="hljs-symbol">D2</span>:<span class="hljs-symbol">D15</span>;Cacluls!<span class="hljs-symbol">A10</span>:<span class="hljs-symbol">A16</span>)
+</div></code></pre>
+<p><em>Résultat et interprétation :</em></p>
+<p><img src="./assets/triaplatE.png" alt=""></p>
+<p>L'interprétation est la même que pour python (cf. <a href="#section2_7">Tri à plat</a>)</p>
+<h2 id="la-covariance-a-class%22anchor%22-id%22section38%22a">La covariance <a class="anchor" id="section3_8"></a></h2>
+<p><em>Résultat et interprétation :</em></p>
+<p><img src="./assets/covarianceE.png" alt=""></p>
+<p>L'interprétation est la même que pour python (cf. <a href="#section2_10">La covariance</a>)</p>
+<h2 id="le-coefficient-de-corr%C3%A9lation-a-class%22anchor%22-id%22section39%22a">Le coefficient de corrélation <a class="anchor" id="section3_9"></a></h2>
+<p><em>Calcul :</em></p>
+<pre class="hljs"><code><div>=<span class="hljs-built_in">CORREL</span>(CarteFidelite!<span class="hljs-symbol">H:H</span>;CarteFidelite!<span class="hljs-symbol">J:J</span>)
+</div></code></pre>
+<p><em>Résultat et interprétation :</em></p>
+<p><img src="./assets/correlationE.png" alt=""></p>
+<p>L'interprétation est la même que pour python (cf. <a href="#section2_11">Le coefficient de corrélation</a>)</p>
+<h2 id="la-droite-de-r%C3%A9gression-et-%C3%A9quation-de-la-droite-a-class%22anchor%22-id%22section310%22a">La droite de régression et équation de la droite <a class="anchor" id="section3_10"></a></h2>
+<p><em>Résultat et interprétation :</em></p>
+<p><img src="./assets/droiteE.png" alt=""></p>
+<p>L'interprétation est la même que pour python (cf. <a href="#section2_11">La droite de régression</a>)</p>
+<h2 id="le-camembert-a-class%22anchor%22-id%22section311%22a">Le camembert <a class="anchor" id="section3_11"></a></h2>
+<p><em>Résultat et interprétation :</em></p>
+<p><img src="./assets/camembertE.png" alt=""></p>
+<p><em>Interprétation</em> :</p>
+<p>On peut voir graphiquement que les deux tiers des clients se trouvent dans la ville de Caen (64%). Sinon on voit graphiquement que le reste des clients sont distribués avec homogénéité (entre 2 et 5%).</p>
+<h2 id="histogramme-a-class%22anchor%22-id%22section312%22a">Histogramme <a class="anchor" id="section3_12"></a></h2>
+<p><em>Résultat et interprétation :</em></p>
+<p><img src="./assets/histogrammeE.png" alt=""></p>
+<p><em>Interprétation</em> :</p>
+<p>L'interprétation est la même que pour python (cf. <a href="#section2_9">Histogramme</a>)</p>
+
+</body>
+</html>

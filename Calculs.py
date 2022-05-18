@@ -1,16 +1,21 @@
 # on importe les bibliothèques qui nous seront utiles
 import statistics
 
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn
 from pandas import *  # pour lire, importer et manipuler des données sous forme tableur
-from numpy import *  # pour faire des calculs
+import numpy as np
 from matplotlib.pylab import *  # pour faire des graphiques
 from scipy.stats import linregress
+from seaborn import *
 
 produit = read_excel('ClasseurBaseTicketsSAE.xlsx', 'Produit')
 carteFidelite = read_excel('ClasseurBaseTicketsSAE.xlsx', 'CarteFidelite')
 ville = read_excel('ClasseurBaseTicketsSAE.xlsx', 'Ville')
 detailTicket = read_excel('ClasseurBaseTicketsSAE.xlsx', 'DetailTicket')
 
+'''
 PrixUnit = produit.Prix_Unit.values
 print("En moyenne, un produit coûte", round(mean(PrixUnit), 2), "€")
 
@@ -77,6 +82,21 @@ show()
 
 prenom = carteFidelite.Prenom.values
 print("Le prénom le plus représenté dans la liste des clients fidèles (mode) est", statistics.mode(prenom))
-
-
-
+'''
+niveauReap = produit.Niveau_Reap.values
+unitesCom = produit.Unites_Com.values
+unitesStock = produit.Unites_Stock.values
+prixUnit = produit.Prix_Unit.values
+matrice = {
+    'Prix_Unit' : prixUnit,
+    'Unites_Stock' : unitesStock,
+    'Unites_Com' : unitesCom,
+    'Niveau_Reap' : niveauReap
+}
+matr = pd.DataFrame(matrice, columns=['Prix_Unit', 'Unites_Stock', 'Unites_Com', 'Niveau_Reap'])
+matrCorr = matr.corr()
+matrCorr = matrCorr.replace(1,0)
+index = np.where(matrCorr == np.nanmax(matrCorr))
+print("max :", matr.columns[index[0]])
+index = np.where(matrCorr == np.nanmin(matrCorr))
+print("min :", matr.columns[index[0]])
